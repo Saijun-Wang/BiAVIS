@@ -14,12 +14,14 @@ Audio-visual segmentation (AVS) aims to segment sounding objects at the pixel le
 
 # 🪧 Overview
 
-![overview](./assets/overview.png)
+![introduction](./assets/introduction.png)
 
 - To the best of our knowledge, this is the first work to formulate binaural audio-visual instance segmentation (BiAVIS), which exploits human-like binaural spatial cues to resolve instance-level intra-class ambiguity that remains challenging for monaural AVIS methods.
 - Two benchmarks are established for BiAVIS. FAIR-Play is annotated with instance-level sounding-object labels, and a new real-world benchmark, BiAVIS-Bench, is collected using a binocular camera and a human-like binaural recording device across diverse acoustic and visual environments.
 - A dedicated audio-only binaural sound source localization network is designed to directly project binaural spatial cues onto the image plane as dense sounding and class probability maps. Unlike existing binaural localization methods that rely on visual input or regress low-dimensional source directions, the proposed network learns spatially grounded and category-aware representations from binaural audio alone.
 - A class-aware audio-visual consistency objective is formulated to explicitly align instance-mask predictions with the audio-derived priors. Unlike existing AVIS methods that mainly rely on semantic audio conditioning, this objective strengthens the spatial alignment between the predicted instance masks and the binaural priors.
+
+![method](./assets/method.png)
 
 # 💾 Dataset
 
