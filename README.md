@@ -12,11 +12,22 @@ Audio-visual segmentation (AVS) aims to segment sounding objects at the pixel le
 
 ![overview](./assets/overview.png)
 
-- We propose BiAVISM, a binaural audio-visual instance segmentation framework. It takes a video frame and synchronized binaural audio as input, and segments the sounding instances.
-- An audio-only sound source localization network projects binaural spatial cues onto the image plane as dense sounding and class probability maps.
-- Binaural priors are injected into a query-based segmentation decoder by query-level audio-visual fusion.
-- The model is trained with segmentation, class-wise localization, and audio-visual consistency losses.
+- To the best of our knowledge, this is the first work to formulate binaural audio-visual instance segmentation (BiAVIS), which exploits human-like binaural spatial cues to resolve instance-level intra-class ambiguity that remains challenging for monaural AVIS methods.
+- Two benchmarks are established for BiAVIS. FAIR-Play is annotated with instance-level sounding-object labels, and a new real-world benchmark, BiAVIS-Bench, is collected using a binocular camera and a human-like binaural recording device across diverse acoustic and visual environments.
+- A dedicated audio-only binaural sound source localization network is designed to directly project binaural spatial cues onto the image plane as dense sounding and class probability maps. Unlike existing binaural localization methods that rely on visual input or regress low-dimensional source directions, the proposed network learns spatially grounded and category-aware representations from binaural audio alone.
+- A class-aware audio-visual consistency objective is formulated to explicitly align instance-mask predictions with the audio-derived priors. Unlike existing AVIS methods that mainly rely on semantic audio conditioning, this objective strengthens the spatial alignment between the predicted instance masks and the binaural priors.
 
-# 🗣️ Acknowledgements
+# 💾 Dataset
 
-Our localization backbone builds on [BAST](https://github.com/ShengKuangCN/BAST), and the visual decoder follows the query design of [Mask2Former](https://github.com/facebookresearch/Mask2Former). We also thank the authors of [AVISM](https://github.com/ruohaoguo/avis), [AVSegFormer](https://github.com/vvvb-github/AVSegFormer), and [COMBO](https://github.com/yannqi/COMBO-AVS) for their baselines and public code.
+![Recording rig and category statistics. (a) ZED 2i binocular camera and Mic.x Binaural I microphone on a custom rig. (b) Instance counts in BiAVIS-Bench. (c) Instance counts in the annotated FAIR-Play set.](./assets/dataset.png)
+
+No public dataset provides instance-level sounding-object masks together with human-like binaural audio. We therefore use two benchmarks. Videos are cut into one-second clips, and only the center frame of each clip is used. Each sounding instance has a pixel mask, a category label, and a sound-source point. A clip contains at most four simultaneous sources.
+
+| Dataset | Videos | Clips | Categories | Sounding instances | Scenes |
+| --- | ---: | ---: | ---: | ---: | --- |
+| FAIR-Play (annotated) | 1,364 | 13,304 | 8 | 19,164 | Single music room |
+| BiAVIS-Bench | 870 | 8,052 | 6 | 8,656 | Indoor, outdoor, and semi-open halls |
+
+BiAVIS-Bench is recorded by a ZED 2i binocular camera and a Mic.x Binaural I microphone, rigidly mounted so that the camera–microphone geometry approximates human eyes and ears. Video is 1,280 × 720 at 30 fps. Binaural audio is 48 kHz, 32-bit. The two streams are soft-synchronized by a shared ROS 2 trigger, with a synchronization error bounded by 10.4 μs. Compared with FAIR-Play, BiAVIS-Bench emphasizes multiple instances of the same category.
+
+Annotations of FAIR-Play and the BiAVIS-Bench release will be made available with the code. Dataset release will follow the consent and privacy constraints described in the paper.
