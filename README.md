@@ -26,6 +26,6 @@ Audio-visual segmentation (AVS) aims to segment sounding objects at the pixel le
 | FAIR-Play (annotated) | 1,364 | 13,304 | 8 | 19,164 | Single music room |
 | BiAVIS-Bench | 870 | 8,052 | 6 | 8,656 | Indoor, outdoor, and semi-open halls |
 
-BiAVIS-Bench is recorded by a ZED 2i binocular camera and a Mic.x Binaural I microphone, rigidly mounted so that the camera–microphone geometry approximates human eyes and ears. Video is 1,280 × 720 at 30 fps. Binaural audio is 48 kHz, 32-bit. The two streams are soft-synchronized by a shared ROS 2 trigger, with a synchronization error bounded by 10.4 μs. Videos are cut into one-second clips, and only the center frame of each clip is used. Each sounding instance has a pixel mask, a category label, and a sound-source point. A clip contains at most four simultaneous sources.
+BiAVIS-Bench is recorded by a ZED 2i binocular camera and a Mic.x Binaural I microphone, rigidly mounted so that the camera–microphone geometry approximates human eyes and ears. Video is 1,280 × 720 at 30 fps. Binaural audio is 48 kHz, 32-bit. The two streams are soft-synchronized by a shared ROS 2 trigger, with a synchronization error bounded by 10.4 μs. Videos are cut into one-second clips, and only the center frame of each clip is annotated with sounding instances. Each sounding instance has a pixel mask, a category label, and a sound-source point. A clip contains at most four simultaneous sources.
 
-Annotations of FAIR-Play and the BiAVIS-Bench release will be made available with the code. Dataset release will follow the consent and privacy constraints described in the paper.
+Annotations of FAIR-Play and the BiAVIS-Bench release will be released later.
