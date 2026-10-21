@@ -1,6 +1,6 @@
 # BiAVIS: Binaural Audio-Visual Instance Segmentation
 
-### [**Paper**](https://arxiv.org/abs/2609.32180) | **Video** | **Project Page**
+### [**Paper**](https://arxiv.org/abs/2609.32180) | **Video** | [**Project Page**](https://saijun-wang.github.io/BiAVIS/)
 
 This is the official implementation for [BiAVIS](https://arxiv.org/abs/2609.32180):
 

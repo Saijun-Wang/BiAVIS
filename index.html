@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="BiAVIS formulates binaural audio-visual instance segmentation. Synchronized binaural audio and video are used to segment sounding instances and resolve intra-class ambiguity.">
+  <meta property="og:title" content="BiAVIS: Binaural Audio-Visual Instance Segmentation" />
+  <meta property="og:description" content="A binaural audio-visual instance segmentation model and two benchmarks, FAIR-Play (annotated) and BiAVIS-Bench." />
+  <meta property="og:url" content="https://saijun-wang.github.io/BiAVIS/" />
+  <meta property="og:image" content="https://saijun-wang.github.io/BiAVIS/assets/introduction.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:title" content="BiAVIS: Binaural Audio-Visual Instance Segmentation">
+  <meta name="twitter:description" content="Segment sounding instances with synchronized binaural audio and video.">
+  <meta name="twitter:image" content="https://saijun-wang.github.io/BiAVIS/assets/introduction.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="keywords" content="BiAVIS, binaural audio, audio-visual segmentation, instance segmentation, sound source localization">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>BiAVIS: Binaural Audio-Visual Instance Segmentation</title>
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+</head>
+
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">BiAVIS: Binaural Audio-Visual Instance Segmentation</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">Saijun Wang<sup>*</sup>,</span>
+              <span class="author-block">Guanfeng Tang<sup>*</sup>,</span>
+              <span class="author-block">Hongbo Zhao,</span>
+              <span class="author-block">Zhicheng Lei,</span>
+              <span class="author-block">Yutong Zhang,</span>
+              <span class="author-block">Wei Ye,</span>
+              <span class="author-block">
+                <a href="https://www.ruirangerfan.com/" target="_blank">Rui Fan</a><sup>&dagger;</sup>
+              </span>
+            </div>
+            <div class="is-size-5 publication-authors">
+              <span class="publication-venue">Tongji University</span>
+            </div>
+            <p class="equal-note"><sup>*</sup>Equal contribution. <sup>&dagger;</sup>Corresponding author.</p>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2609.32180" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2609.32180" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://github.com/Saijun-Wang/BiAVIS" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fab fa-github"></i></span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <!-- Video: replace "#" with the Bilibili or YouTube URL when it is ready.
+                <span class="link-block">
+                  <a href="#" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon"><i class="fas fa-video"></i></span>
+                    <span>Video</span>
+                  </a>
+                </span>
+                -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <img src="assets/introduction.png" alt="Comparison of monaural AVISM and the proposed BiAVISM.">
+        <p class="caption has-text-centered">
+          AVISM conditions queries with monaural audio and can confuse instances of the same class.
+          BiAVISM uses binaural spatial priors to segment the instance that is actually sounding.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Audio-visual segmentation (AVS) aims to segment sounding objects at the pixel level by integrating auditory and visual cues. Existing methods are predominantly developed under the monaural setting and primarily rely on cross-modal semantic correspondence, which limits their ability to distinguish visually similar instances of the same semantic class. In contrast, humans naturally exploit binaural hearing, where interaural differences and direction-dependent acoustic filtering introduced by the head and pinnae provide physically grounded spatial cues for accurate sound source localization. Motivated by this observation, we introduce binaural audio-visual instance segmentation (BiAVIS), a new task that leverages synchronized binaural audio and video frames to segment sounding instances. To advance research on this task, we establish two benchmarks by manually annotating an existing binaural audio-visual dataset and collecting a new real-world dataset, BiAVIS-Bench, in more challenging and diverse scenarios. The proposed BiAVIS model (BiAVISM) features an audio-only sound source localization network that directly projects binaural spatial cues onto the image plane to learn spatial and semantic priors for sounding instances. A query-level audio-visual fusion strategy is subsequently introduced to inject these informative priors into the instance segmentation decoder. Extensive experiments conducted on the two proposed benchmarks demonstrate the superior performance of BiAVISM over previous monaural AVS methods, especially in resolving instance-level intra-class ambiguity. On the more challenging BiAVIS-Bench, BiAVISM achieves 26.65 mAP and 45.90 FSLA, corresponding to relative improvements of approximately 35.35% over AVISM in mean average precision (mAP) and 11.62% over ACVIS in frame-level sound localization accuracy (FSLA).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3 has-text-centered">Overview</h2>
+          <div class="content">
+            <ul>
+              <li>To the best of our knowledge, this is the first work to formulate binaural audio-visual instance segmentation (BiAVIS), which exploits human-like binaural spatial cues to resolve instance-level intra-class ambiguity that remains challenging for monaural AVIS methods.</li>
+              <li>Two benchmarks are established for BiAVIS. FAIR-Play is annotated with instance-level sounding-object labels, and a new real-world benchmark, BiAVIS-Bench, is collected using a binocular camera and a human-like binaural recording device across diverse acoustic and visual environments.</li>
+              <li>A dedicated audio-only binaural sound source localization network is designed to directly project binaural spatial cues onto the image plane as dense sounding and class probability maps. Unlike existing binaural localization methods that rely on visual input or regress low-dimensional source directions, the proposed network learns spatially grounded and category-aware representations from binaural audio alone.</li>
+              <li>A class-aware audio-visual consistency objective is formulated to explicitly align instance-mask predictions with the audio-derived priors. Unlike existing AVIS methods that mainly rely on semantic audio conditioning, this objective strengthens the spatial alignment between the predicted instance masks and the binaural priors.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Methodology</h2>
+          <div class="content has-text-justified">
+            <img src="assets/method.png" alt="Overview of the BiAVISM framework.">
+            <p class="caption">
+              The audio encoder extracts channel-specific spectrogram features and binaural-difference features. An audio-only sound source localization branch predicts sounding and class probability maps on the image plane. These binaural priors condition object queries through query-level cross-attention, and the decoder is trained with segmentation, class-wise localization, and audio-visual consistency losses.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Dataset</h2>
+          <div class="content has-text-justified">
+            <img src="assets/dataset.png" alt="Recording rig and category statistics of BiAVIS-Bench and FAIR-Play.">
+            <p class="caption">
+              (a) The recording rig pairs a ZED 2i binocular camera with a Mic.x Binaural I microphone so that the camera–microphone geometry approximates human eyes and ears. (b) Instance counts in BiAVIS-Bench. (c) Instance counts in the annotated FAIR-Play dataset.
+            </p>
+            <div class="table-wrap">
+              <table class="results stat-table">
+                <thead>
+                  <tr>
+                    <th>Dataset</th>
+                    <th>Videos</th>
+                    <th>Clips</th>
+                    <th>Categories</th>
+                    <th>Sounding instances</th>
+                    <th>Scenes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>FAIR-Play (annotated)</td>
+                    <td>1,364</td>
+                    <td>13,304</td>
+                    <td>8</td>
+                    <td>19,164</td>
+                    <td>Single music room</td>
+                  </tr>
+                  <tr>
+                    <td>BiAVIS-Bench</td>
+                    <td>870</td>
+                    <td>8,052</td>
+                    <td>6</td>
+                    <td>8,656</td>
+                    <td>Indoor, outdoor, and semi-open halls</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Video is 1,280 &times; 720 at 30 fps. Binaural audio is 48 kHz, 32-bit. The two streams are soft-synchronized by a shared ROS 2 trigger, with a synchronization error bounded by 10.4 &mu;s. Videos are cut into one-second clips, and only the center frame of each clip is annotated. Each sounding instance has a pixel mask, a category label, and a sound-source point. A clip contains at most four simultaneous sources.
+            </p>
+            <p>
+              The FAIR-Play annotations, together with the BiAVIS-Bench data and annotations, will be released later.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Experimental Results</h2>
+          <div class="content has-text-justified">
+            <img src="assets/experiment.png" alt="Qualitative comparison of sounding-object segmentation.">
+            <p class="caption">
+              Qualitative comparison across diverse scenes. Competing methods often segment a visually salient but silent instance of the same class. BiAVISM keeps the mask on the sounding instance.
+            </p>
+            <h3 class="title is-5 has-text-centered">BiAVIS-Bench</h3>
+            <div class="table-wrap">
+              <table class="results">
+                <thead>
+                  <tr>
+                    <th class="left">Task</th>
+                    <th class="left">Method</th>
+                    <th>mAP</th>
+                    <th>FSLA</th>
+                    <th>FSLAn</th>
+                    <th>FSLAs</th>
+                    <th>FSLAm</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>VIS</td><td class="left">Mask2Former</td><td>22.32</td><td>40.22</td><td>10.58</td><td>45.07</td><td>16.74</td></tr>
+                  <tr><td>VIS</td><td class="left">MP-Former</td><td>18.89</td><td>19.82</td><td>2.88</td><td>21.95</td><td>10.89</td></tr>
+                  <tr><td>VIS</td><td class="left">PolarNeXt</td><td>15.72</td><td>28.61</td><td>2.88</td><td>33.32</td><td>4.71</td></tr>
+                  <tr><td>AVSS</td><td class="left">COMBO</td><td>19.00</td><td>38.49</td><td>9.62</td><td>43.46</td><td>13.88</td></tr>
+                  <tr><td>AVSS</td><td class="left">AVSegFormer</td><td>15.47</td><td>28.61</td><td>4.81</td><td>32.30</td><td>11.15</td></tr>
+                  <tr><td>AVSS</td><td class="left">AVS-Semantic</td><td>20.14</td><td>36.57</td><td>7.69</td><td>41.51</td><td>12.20</td></tr>
+                  <tr><td>AVSS</td><td class="left">DDESeg</td><td>9.89</td><td>21.10</td><td>3.85</td><td>28.85</td><td>5.37</td></tr>
+                  <tr><td>AVIS</td><td class="left">AVISM</td><td>19.69</td><td>40.23</td><td>5.77</td><td>45.13</td><td>18.08</td></tr>
+                  <tr><td>AVIS</td><td class="left">ACVIS</td><td>18.35</td><td>41.12</td><td>5.77</td><td>46.04</td><td>19.26</td></tr>
+                  <tr><td>AVIS</td><td class="left">H2S</td><td>12.46</td><td>40.48</td><td>9.62</td><td>45.09</td><td>19.16</td></tr>
+                  <tr class="ours"><td>AVIS</td><td class="left">BiAVISM (Ours)</td><td>26.65</td><td>45.90</td><td>60.58</td><td>48.14</td><td>24.78</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 class="title is-5 has-text-centered">FAIR-Play</h3>
+            <div class="table-wrap">
+              <table class="results">
+                <thead>
+                  <tr>
+                    <th class="left">Task</th>
+                    <th class="left">Method</th>
+                    <th>mAP</th>
+                    <th>FSLA</th>
+                    <th>FSLAn</th>
+                    <th>FSLAs</th>
+                    <th>FSLAm</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>VIS</td><td class="left">Mask2Former</td><td>35.71</td><td>60.56</td><td>3.52</td><td>72.38</td><td>44.23</td></tr>
+                  <tr><td>VIS</td><td class="left">MP-Former</td><td>26.43</td><td>54.17</td><td>0.00</td><td>73.98</td><td>24.40</td></tr>
+                  <tr><td>VIS</td><td class="left">PolarNeXt</td><td>30.41</td><td>36.55</td><td>0.00</td><td>51.12</td><td>14.45</td></tr>
+                  <tr><td>AVSS</td><td class="left">COMBO</td><td>33.27</td><td>56.27</td><td>17.65</td><td>63.86</td><td>45.91</td></tr>
+                  <tr><td>AVSS</td><td class="left">AVSegFormer</td><td>27.36</td><td>44.88</td><td>76.47</td><td>59.75</td><td>18.36</td></tr>
+                  <tr><td>AVSS</td><td class="left">AVS-Semantic</td><td>34.04</td><td>53.66</td><td>15.29</td><td>65.11</td><td>36.86</td></tr>
+                  <tr><td>AVSS</td><td class="left">DDESeg</td><td>8.04</td><td>35.92</td><td>25.88</td><td>42.98</td><td>24.79</td></tr>
+                  <tr><td>AVIS</td><td class="left">AVISM</td><td>33.68</td><td>56.94</td><td>56.47</td><td>66.17</td><td>41.63</td></tr>
+                  <tr><td>AVIS</td><td class="left">ACVIS</td><td>32.75</td><td>60.68</td><td>4.71</td><td>70.18</td><td>48.14</td></tr>
+                  <tr><td>AVIS</td><td class="left">H2S</td><td>11.99</td><td>49.84</td><td>17.65</td><td>64.26</td><td>27.74</td></tr>
+                  <tr class="ours"><td>AVIS</td><td class="left">BiAVISM (Ours)</td><td>37.63</td><td>62.90</td><td>89.41</td><td>68.63</td><td>51.85</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              BiAVISM obtains the best overall mAP and FSLA on both benchmarks. The gain is larger on BiAVIS-Bench, where multiple visually similar instances of the same category are common. On FAIR-Play, MP-Former is higher on the single-source metric FSLAs; that set is dominated by single-source clips, where the sounding object is often also the most visually salient one.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@misc{wang2026binauralaudiovisualinstancesegmentation,
+  title={Binaural Audio-Visual Instance Segmentation},
+  author={Saijun Wang and Guanfeng Tang and Hongbo Zhao and Zhicheng Lei and Yutong Zhang and Wei Ye and Rui Fan},
+  year={2026},
+  eprint={2609.32180},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2609.32180}
+}</code></pre>
+    </div>
+  </section>
+
+</body>
+
+</html>
